@@ -43,6 +43,10 @@ public class IncidenciaService {
 
     public IncidenciaResponseDTO crearIncidencia(IncidenciaRequestDTO dto) {
         Incidencia incidencia = incidenciaMapper.toEntity(dto);
+
+        incidencia.setCodigoIncidencia("INC-" + System.currentTimeMillis());
+        incidencia.setEstado("ABIERTA");
+
         Incidencia incidenciaGuardada = incidenciaRepository.save(incidencia);
 
         return incidenciaMapper.toDTO(incidenciaGuardada);

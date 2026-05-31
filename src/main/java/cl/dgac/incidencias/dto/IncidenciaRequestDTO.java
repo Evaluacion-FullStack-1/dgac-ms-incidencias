@@ -9,9 +9,6 @@ import java.time.LocalDate;
 @Data
 public class IncidenciaRequestDTO {
 
-    @NotBlank(message = "El código de incidencia es obligatorio")
-    private String codigoIncidencia;
-
     @NotBlank(message = "El tipo de incidencia es obligatorio")
     private String tipoIncidencia;
 
@@ -20,9 +17,6 @@ public class IncidenciaRequestDTO {
 
     @NotNull(message = "La fecha de incidencia es obligatoria")
     private LocalDate fechaIncidencia;
-
-    @NotBlank(message = "El estado es obligatorio")
-    private String estado;
 
     @NotBlank(message = "El nivel de gravedad es obligatorio")
     private String nivelGravedad;

@@ -11,11 +11,9 @@ public class IncidenciaMapper {
     public Incidencia toEntity(IncidenciaRequestDTO dto) {
         Incidencia incidencia = new Incidencia();
 
-        incidencia.setCodigoIncidencia(dto.getCodigoIncidencia());
         incidencia.setTipoIncidencia(dto.getTipoIncidencia());
         incidencia.setDescripcion(dto.getDescripcion());
         incidencia.setFechaIncidencia(dto.getFechaIncidencia());
-        incidencia.setEstado(dto.getEstado());
         incidencia.setNivelGravedad(dto.getNivelGravedad());
         incidencia.setPlanVueloId(dto.getPlanVueloId());
         incidencia.setDroneId(dto.getDroneId());
@@ -42,11 +40,9 @@ public class IncidenciaMapper {
     }
 
     public void updateEntity(Incidencia incidencia, IncidenciaRequestDTO dto) {
-        incidencia.setCodigoIncidencia(dto.getCodigoIncidencia());
         incidencia.setTipoIncidencia(dto.getTipoIncidencia());
         incidencia.setDescripcion(dto.getDescripcion());
         incidencia.setFechaIncidencia(dto.getFechaIncidencia());
-        incidencia.setEstado(dto.getEstado());
         incidencia.setNivelGravedad(dto.getNivelGravedad());
         incidencia.setPlanVueloId(dto.getPlanVueloId());
         incidencia.setDroneId(dto.getDroneId());
