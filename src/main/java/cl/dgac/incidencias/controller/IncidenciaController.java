@@ -4,6 +4,8 @@ import cl.dgac.incidencias.dto.IncidenciaRequestDTO;
 import cl.dgac.incidencias.dto.IncidenciaResponseDTO;
 import cl.dgac.incidencias.service.IncidenciaService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -42,7 +44,22 @@ public class IncidenciaController {
         return ResponseEntity.ok(incidenciaService.buscarPorId(id));
     }
 
-    @Operation(summary = "Registrar nueva incidencia", description = "Ingresa un nuevo reporte de accidente, infracción o anomalía ocurrida durante una operación de vuelo.")
+    @Operation(
+            summary = "Registrar nueva incidencia", 
+            description = "Ingresa un nuevo reporte de accidente, infracción o anomalía ocurrida durante una operación de vuelo.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Estructura de datos para registrar una nueva incidencia",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "Ejemplo de Registro de Incidencia",
+                                    summary = "JSON de prueba para falla técnica",
+                                    value = "{\n  \"tipoIncidencia\": \"FALLA_TECNICA\",\n  \"nivelGravedad\": \"GRAVE\",\n  \"descripcion\": \"Pérdida repentina de enlace C2 durante el trayecto, forzando aterrizaje de emergencia.\",\n  \"planVueloId\": 105,\n  \"estado\": \"EN_INVESTIGACION\"\n}"
+                            )
+                    )
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "Incidencia registrada exitosamente"),
             @ApiResponse(responseCode = "400", description = "Datos de entrada inválidos (ej. código duplicado)")
@@ -55,7 +72,22 @@ public class IncidenciaController {
         return ResponseEntity.status(HttpStatus.CREATED).body(incidenciaCreada);
     }
 
-    @Operation(summary = "Actualizar estado o detalles de la incidencia", description = "Modifica la información de un reporte existente, como actualizar su estado de investigación.")
+    @Operation(
+            summary = "Actualizar estado o detalles de la incidencia", 
+            description = "Modifica la información de un reporte existente, como actualizar su estado de investigación.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    description = "Estructura de datos para actualizar la incidencia",
+                    required = true,
+                    content = @Content(
+                            mediaType = "application/json",
+                            examples = @ExampleObject(
+                                    name = "Ejemplo de Actualización de Incidencia",
+                                    summary = "JSON de prueba para actualizar estado",
+                                    value = "{\n  \"tipoIncidencia\": \"FALLA_TECNICA\",\n  \"nivelGravedad\": \"LEVE\",\n  \"descripcion\": \"Se revisó telemetría, el equipo operó con normalidad posterior al microcorte.\",\n  \"planVueloId\": 105,\n  \"estado\": \"RESUELTA\"\n}"
+                            )
+                    )
+            )
+    )
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Incidencia actualizada exitosamente"),
             @ApiResponse(responseCode = "404", description = "Incidencia no encontrada"),

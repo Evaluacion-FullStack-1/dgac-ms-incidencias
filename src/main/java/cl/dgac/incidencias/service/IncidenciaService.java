@@ -17,14 +17,16 @@ public class IncidenciaService {
 
     private final IncidenciaRepository incidenciaRepository;
     private final IncidenciaMapper incidenciaMapper;
-    private final WebClient.Builder webClientBuilder;
+    
+    // Inyectamos el WebClient configurado directamente
+    private final WebClient webClientPlanesVuelo;
 
     public IncidenciaService(IncidenciaRepository incidenciaRepository,
                              IncidenciaMapper incidenciaMapper,
-                             WebClient.Builder webClientBuilder) {
+                             WebClient webClientPlanesVuelo) {
         this.incidenciaRepository = incidenciaRepository;
         this.incidenciaMapper = incidenciaMapper;
-        this.webClientBuilder = webClientBuilder;
+        this.webClientPlanesVuelo = webClientPlanesVuelo;
     }
 
     public List<IncidenciaResponseDTO> listarIncidencias() {
@@ -105,9 +107,10 @@ public class IncidenciaService {
     }
 
     public String consultarMicroservicioPlanesVuelo() {
-        return webClientBuilder.build()
+        // Utilizamos el WebClient con la ruta relativa, sin localhost
+        return webClientPlanesVuelo
                 .get()
-                .uri("http://localhost:8088/api/planes-vuelo")
+                .uri("/api/planes-vuelo")
                 .retrieve()
                 .bodyToMono(String.class)
                 .block();
