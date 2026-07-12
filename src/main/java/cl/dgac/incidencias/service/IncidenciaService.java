@@ -6,8 +6,9 @@ import cl.dgac.incidencias.exception.ResourceNotFoundException;
 import cl.dgac.incidencias.mapper.IncidenciaMapper;
 import cl.dgac.incidencias.model.Incidencia;
 import cl.dgac.incidencias.repository.IncidenciaRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,15 +19,19 @@ public class IncidenciaService {
     private final IncidenciaRepository incidenciaRepository;
     private final IncidenciaMapper incidenciaMapper;
     
-    // Inyectamos el WebClient configurado directamente
-    private final WebClient webClientPlanesVuelo;
+    // Inyectamos RestTemplate en lugar de WebClient
+    private final RestTemplate restTemplate;
+
+    // Leemos la URL base desde el application.yml
+    @Value("${planes-vuelo.base-url}")
+    private String planesVueloBaseUrl;
 
     public IncidenciaService(IncidenciaRepository incidenciaRepository,
                              IncidenciaMapper incidenciaMapper,
-                             WebClient webClientPlanesVuelo) {
+                             RestTemplate restTemplate) {
         this.incidenciaRepository = incidenciaRepository;
         this.incidenciaMapper = incidenciaMapper;
-        this.webClientPlanesVuelo = webClientPlanesVuelo;
+        this.restTemplate = restTemplate;
     }
 
     public List<IncidenciaResponseDTO> listarIncidencias() {
@@ -46,6 +51,7 @@ public class IncidenciaService {
     public IncidenciaResponseDTO crearIncidencia(IncidenciaRequestDTO dto) {
         Incidencia incidencia = incidenciaMapper.toEntity(dto);
 
+        // Generación automática del código y estado inicial
         incidencia.setCodigoIncidencia("INC-" + System.currentTimeMillis());
         incidencia.setEstado("ABIERTA");
 
@@ -106,13 +112,12 @@ public class IncidenciaService {
                 .collect(Collectors.toList());
     }
 
+    // --- MÉTODO CORREGIDO ---
     public String consultarMicroservicioPlanesVuelo() {
-        // Utilizamos el WebClient con la ruta relativa, sin localhost
-        return webClientPlanesVuelo
-                .get()
-                .uri("/api/planes-vuelo")
-                .retrieve()
-                .bodyToMono(String.class)
-                .block();
+        // Construimos la URL completa para llamar al otro servicio vía Eureka
+        String urlFinal = planesVueloBaseUrl + "/api/planes-vuelo";
+        
+        // Hacemos la petición GET de forma síncrona
+        return restTemplate.getForObject(urlFinal, String.class);
     }
 }

@@ -160,7 +160,7 @@ public class IncidenciaController {
         return ResponseEntity.ok(incidenciaService.buscarPorTipoIncidencia(tipoIncidencia));
     }
 
-    @Operation(summary = "Consultar estado del servicio de Planes de Vuelo (WebClient)", description = "Endpoint de integración para verificar la disponibilidad del microservicio de Planes de Vuelo.")
+    @Operation(summary = "Consultar estado del servicio de Planes de Vuelo", description = "Endpoint de integración para verificar la disponibilidad del microservicio de Planes de Vuelo.")
     @ApiResponse(responseCode = "200", description = "Comunicación exitosa con el microservicio de Planes de Vuelo")
     @GetMapping("/planes-vuelo")
     public ResponseEntity<String> consultarPlanesVuelo() {
